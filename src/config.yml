@@ -1,0 +1,8 @@
+##Permissions
+# -stoprain.enable -- Can disable the plugin
+# -stoprain.setconsolemessage -- Can enable/disable console messages on rain cancels
+# -stoprain.sendnumberofcancels -- Can get the number of times the rain was canceled
+
+enabled: 'true'
+showConsoleMessage: 'true'
+numberOfCancels: 0

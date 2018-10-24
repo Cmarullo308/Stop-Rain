@@ -1,0 +1,10 @@
+main: me.CJStopRain.Main.Main
+name: StopRain
+author: CJM
+version: 1.0
+api-version: 1.13
+description: Prevents rain
+commands:
+  stoprain:
+    usage: /<StopRain>
+    description: default command
