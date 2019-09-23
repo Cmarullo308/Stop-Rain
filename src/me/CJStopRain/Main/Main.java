@@ -1,5 +1,9 @@
 package me.CJStopRain.Main;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -9,12 +13,24 @@ import net.md_5.bungee.api.ChatColor;
 
 public class Main extends JavaPlugin {
 
+	public String helpMessage;
+
 	@Override
 	public void onEnable() {
 		this.getServer().getPluginManager().registerEvents(new MyEvents(this), this);
 
+		createHelpMessage();
+
 		getConfig().options().copyDefaults(true);
 		saveConfig();
+	}
+
+	private void createHelpMessage() {
+		helpMessage = ChatColor.BOLD + "Commands\n";
+
+		helpMessage += ChatColor.WHITE + "  StopRain setEnabled <true | false>\n";
+		helpMessage += ChatColor.GRAY + "  StopRain showconsolemessage <true | false>\n";
+		helpMessage += ChatColor.WHITE + "  StopRain numberofcancels";
 	}
 
 	@Override
@@ -31,12 +47,56 @@ public class Main extends JavaPlugin {
 			case "numberofcancels":
 				sendNumberOfCancels(sender);
 				break;
+			case "help":
+				sender.sendMessage(helpMessage);
+				break;
 			default:
+				sender.sendMessage(ChatColor.RED + "Invalid arguements");
 				break;
 			}
 		}
 
 		return true;
+	}
+
+	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+
+		if (command.getName().equalsIgnoreCase("stoprain")) {
+			ArrayList<String> choices = new ArrayList<String>();
+
+			if (args.length == 1) {
+				if ("setenabled".startsWith(args[0].toLowerCase())) {
+					choices.add("setenabled");
+				}
+
+				if ("showconsolemessage".startsWith(args[0].toLowerCase())) {
+					choices.add("showconsolemessage");
+				}
+
+				if ("numberofcancels".startsWith(args[0].toLowerCase())) {
+					choices.add("numberofcancels");
+				}
+
+				if ("help".startsWith(args[0].toLowerCase())) {
+					choices.add("help");
+				}
+			} else if (args.length == 2) {
+				if (args[0].equalsIgnoreCase("setenabled") || args[0].equalsIgnoreCase("showconsolemessage")) {
+					if ("true".startsWith(args[1].toLowerCase())) {
+						choices.add("true");
+					}
+
+					if ("false".startsWith(args[1].toLowerCase())) {
+						choices.add("false");
+					}
+				}
+			}
+
+			Collections.sort(choices);
+			return choices;
+		}
+
+		return null;
 	}
 
 	private void sendNumberOfCancels(CommandSender sender) {
